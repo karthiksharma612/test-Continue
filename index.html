@@ -341,6 +341,109 @@
       body[data-theme="light"] .theme-toggle:hover {
         background: rgba(0, 60, 160, 0.15);
       }
+
+      /* Black theme overrides */
+      body[data-theme="black"] {
+        background: #000000;
+        color: #f5f7fa;
+      }
+      body[data-theme="black"] .backdrop {
+        background: linear-gradient(160deg, rgba(10,10,10,0.85), rgba(20,20,20,0.7));
+        box-shadow: 0 50px 100px rgba(0,0,0,0.7);
+      }
+      body[data-theme="black"] .blob { display: none; }
+      body[data-theme="black"] .swirl { border-color: rgba(255,255,255,0.06); }
+      body[data-theme="black"] .login-card {
+        background: linear-gradient(175deg, #0d0d0d, #181818);
+        box-shadow: 0 28px 60px rgba(0,0,0,0.8);
+        color: #f5f7fa;
+      }
+      body[data-theme="black"] .login-card h1,
+      body[data-theme="black"] .login-card h2 { color: #ffffff; }
+      body[data-theme="black"] .input-field {
+        background: #222;
+        color: #f5f7fa;
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+      }
+      body[data-theme="black"] .input-field::placeholder { color: rgba(220,230,240,0.45); }
+      body[data-theme="black"] .forgot { color: rgba(230,235,240,0.7); }
+      body[data-theme="black"] .forgot:hover { color: #ffffff; }
+      body[data-theme="black"] .primary-button {
+        background: linear-gradient(135deg, #101010, #202020);
+        color: #ffffff;
+      }
+      body[data-theme="black"] .divider { color: rgba(220,230,240,0.55); }
+      body[data-theme="black"] .social-button {
+        background: #1c1c1c;
+        color: #e2e6ea;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      }
+      body[data-theme="black"] .social-button:hover { box-shadow: 0 12px 22px rgba(0,0,0,0.7); }
+      body[data-theme="black"] .footer-note { color: rgba(220,230,240,0.6); }
+      body[data-theme="black"] .footer-note a { color: #ffffff; }
+      body[data-theme="black"] .theme-toggle {
+        background: rgba(255,255,255,0.08);
+        color: #f5f7fa;
+        border-color: rgba(255,255,255,0.18);
+      }
+      body[data-theme="black"] .theme-toggle:hover { background: rgba(255,255,255,0.15); }
+
+      /* Journey theme (gold & deep black) */
+      body[data-theme="journey"] {
+        background: radial-gradient(circle at 40% 30%, #111111 0%, #0a0a0a 55%, #000000 100%);
+        color: #f5f5f5;
+      }
+      body[data-theme="journey"] .backdrop {
+        background: linear-gradient(160deg, rgba(17,17,17,0.9), rgba(26,26,26,0.78));
+        box-shadow: 0 50px 110px rgba(0,0,0,0.75);
+        border: 1px solid rgba(212,175,55,0.18);
+      }
+      body[data-theme="journey"] .blob { display: none; }
+      body[data-theme="journey"] .swirl { border-color: rgba(212,175,55,0.06); }
+      body[data-theme="journey"] .login-card {
+        background: linear-gradient(175deg, #111111, #1a1a1a);
+        box-shadow: 0 30px 70px rgba(0,0,0,0.85);
+        color: #f5f5f5;
+        border: 1px solid rgba(201,169,97,0.25);
+      }
+      body[data-theme="journey"] .login-card h1,
+      body[data-theme="journey"] .login-card h2 { color: #ffd700; }
+      body[data-theme="journey"] .input-field {
+        background: #1f1f1f;
+        color: #f5f5f5;
+        box-shadow: 0 0 0 1px rgba(255,215,0,0.12);
+      }
+      body[data-theme="journey"] .input-field:focus {
+        box-shadow: 0 0 0 2px rgba(255,215,0,0.35);
+      }
+      body[data-theme="journey"] .input-field::placeholder { color: #737373; }
+      body[data-theme="journey"] .forgot { color: #c9a961; }
+      body[data-theme="journey"] .forgot:hover { color: #ffd700; }
+      body[data-theme="journey"] .primary-button {
+        background: linear-gradient(135deg, #d4af37, #ffd700);
+        color: #111111;
+        box-shadow: 0 10px 24px rgba(255,215,0,0.25);
+      }
+      body[data-theme="journey"] .primary-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(255,215,0,0.35);
+      }
+      body[data-theme="journey"] .divider { color: rgba(245,245,245,0.6); }
+      body[data-theme="journey"] .social-button {
+        background: #262626;
+        color: #f0d875;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+        border: 1px solid rgba(180,148,30,0.3);
+      }
+      body[data-theme="journey"] .social-button:hover { box-shadow: 0 14px 26px rgba(0,0,0,0.75); }
+      body[data-theme="journey"] .footer-note { color: #c9a961; }
+      body[data-theme="journey"] .footer-note a { color: #ffd700; }
+      body[data-theme="journey"] .theme-toggle {
+        background: rgba(255,215,0,0.16);
+        color: #f0d875;
+        border-color: rgba(212,175,55,0.4);
+      }
+      body[data-theme="journey"] .theme-toggle:hover { background: rgba(255,215,0,0.26); }
     </style>
   </head>
   <body>
@@ -416,22 +519,37 @@
       (function() {
         const body = document.body;
         const toggle = document.getElementById('themeToggle');
+        const themes = ['dark','light','black','journey']; // dark is implicit (no attribute)
+        const labels = {
+          dark: 'Dark',
+          light: 'Light',
+          black: 'Black',
+          journey: 'Journey'
+        };
+        function applyTheme(theme) {
+          if (theme === 'dark') {
+            body.removeAttribute('data-theme');
+            const next = themes[1];
+            toggle.textContent = labels[next] + ' Theme';
+          } else {
+            body.setAttribute('data-theme', theme);
+            const currentIndex = themes.indexOf(theme);
+            const next = themes[(currentIndex + 1) % themes.length];
+            toggle.textContent = labels[next] + ' Theme';
+          }
+          localStorage.setItem('theme', theme);
+        }
         const saved = localStorage.getItem('theme');
-        if (saved === 'light') {
-          body.setAttribute('data-theme', 'light');
-          toggle.textContent = 'Dark Theme';
+        if (saved && themes.includes(saved)) {
+          applyTheme(saved);
+        } else {
+          applyTheme('dark');
         }
         toggle.addEventListener('click', () => {
-          const isLight = body.getAttribute('data-theme') === 'light';
-          if (isLight) {
-            body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'dark');
-            toggle.textContent = 'Light Theme';
-          } else {
-            body.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-            toggle.textContent = 'Dark Theme';
-          }
+          const current = body.getAttribute('data-theme') || 'dark';
+          const idx = themes.indexOf(current);
+          const next = themes[(idx + 1) % themes.length];
+          applyTheme(next);
         });
       })();
     </script>
